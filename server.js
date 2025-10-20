@@ -26,7 +26,7 @@ app.post("/api/chatbot", async (req, res) => {
     const question = req.body.question || "";
 
     const completion = await client.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4-turbo",
       messages: [
         { role: "system", content: "Tu es l'assistant officiel de STE Construction. Réponds avec convivialité et professionnalisme à toutes les questions liées à la construction, rénovation et extension de maisons en région parisienne." },
         { role: "user", content: question }
