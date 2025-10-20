@@ -16,32 +16,31 @@ app.use(cors({
   methods: ["POST"],
   allowedHeaders: ["Content-Type"]
 }));
-const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
 
 app.post("/api/chatbot", async (req, res) => {
-  const question = req.body.question || "";
-  if (!question) return res.json({ answer: "Je n'ai pas compris ta question 😅" });
-
   try {
+    const question = req.body.question || "";
+
     const completion = await client.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-3.5-turbo",
       messages: [
-        {
-          role: "system",
-          content: "Tu es l'assistant virtuel de STE Construction. Réponds comme un conseiller humain, avec précision et chaleur."
-        },
+        { role: "system", content: "Tu es l'assistant officiel de STE Construction. Réponds avec convivialité et professionnalisme à toutes les questions liées à la construction, rénovation et extension de maisons en région parisienne." },
         { role: "user", content: question }
       ],
-      max_tokens: 250,
-      temperature: 0.7
+      temperature: 0.8
     });
 
     const answer = completion.choices[0].message.content;
     res.json({ answer });
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    console.error("Erreur serveur :", err);
     res.json({ answer: "Désolé, je n’ai pas pu répondre cette fois 😕" });
   }
 });
 
-app.listen(10000, () => console.log("Serveur IA en ligne sur Render 🧠"));
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
