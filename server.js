@@ -9,11 +9,13 @@ dotenv.config();
 const app = express();
 app.use(bodyParser.json());
 app.use(cors({
-  origin: "https://ste-construction.fr", // 💙 ton domaine exact
+  origin: [
+    "https://ste-construction.fr",
+    "https://www.ste-construction.fr"
+  ],
   methods: ["POST"],
   allowedHeaders: ["Content-Type"]
 }));
-
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 app.post("/api/chatbot", async (req, res) => {
